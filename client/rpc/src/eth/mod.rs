@@ -53,6 +53,7 @@ use crate::{internal_err, overrides::OverrideHandle, public_key, signer::EthSign
 
 pub use self::{
 	cache::{EthBlockDataCacheTask, EthTask},
+	execute::EstimateGasAdapter,
 	filter::EthFilter,
 };
 
@@ -65,6 +66,7 @@ pub trait EthConfig: 'static {
 	type Block: BlockT;
 	type Hash: ExHashT;
 	type Backend;
+	type EstimateGasAdapter: EstimateGasAdapter;
 }
 
 /// Eth API implementation.

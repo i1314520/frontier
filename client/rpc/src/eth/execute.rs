@@ -43,6 +43,24 @@ use crate::{
 /// Default JSONRPC error code return by geth
 pub const JSON_RPC_ERROR_DEFAULT: i32 = -32000;
 
+/// Allow to adapt a request for `estimate_gas`.
+/// Can be used to estimate gas of some contracts using a different function
+/// in the case the normal gas estimation doesn't work.
+///
+/// Exemple: a precompile that tries to do a subcall but succeeds regardless of the
+/// success of the subcall. The gas estimation will thus optimize the gas limit down
+/// to the minimum, while we want to estimate a gas limit that will allow the subcall to
+/// have enough gas to succeed.
+pub trait EstimateGasAdapter {
+	fn adapt_request(request: CallRequest) -> CallRequest;
+}
+
+impl EstimateGasAdapter for () {
+	fn adapt_request(request: CallRequest) -> CallRequest {
+		request
+	}
+}
+
 impl<T: EthConfig> Eth<T>
 where
 	T::Block: BlockT<Hash = H256> + Send + Sync + 'static,
@@ -289,6 +307,9 @@ where
 
 		// Get best hash (TODO missing support for estimating gas historically)
 		let best_hash = client.info().best_hash;
+
+		// Adapt request for gas estimation.
+		let request = T::EstimateGasAdapter::adapt_request(request);
 
 		// For simple transfer to simple account, return MIN_GAS_PER_TX directly
 		let is_simple_transfer = match &request.data {
