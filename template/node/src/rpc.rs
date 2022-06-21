@@ -112,6 +112,7 @@ where
 	type Block = Block;
 	type Hash = Hash;
 	type Backend = BE;
+	type Formatter = fc_rpc::format::Legacy;
 }
 
 /// Instantiate all Full RPC extensions.

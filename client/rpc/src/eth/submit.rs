@@ -36,7 +36,7 @@ use fc_rpc_core::types::*;
 use fp_rpc::{ConvertTransaction, ConvertTransactionRuntimeApi, EthereumRuntimeRPCApi};
 
 use crate::{
-	eth::{Eth, EthConfig},
+	eth::{format::Formatter, Eth, EthConfig},
 	internal_err,
 };
 
@@ -207,7 +207,7 @@ where
 		self.pool
 			.submit_one(&block_hash, TransactionSource::Local, extrinsic)
 			.map_ok(move |_| transaction_hash)
-			.map_err(|err| internal_err(format!("submit transaction to pool failed: {:?}", err)))
+			.map_err(|err| internal_err(T::Formatter::pool_error(err)))
 			.await
 	}
 
@@ -294,7 +294,7 @@ where
 		self.pool
 			.submit_one(&block_hash, TransactionSource::Local, extrinsic)
 			.map_ok(move |_| transaction_hash)
-			.map_err(|err| internal_err(format!("submit transaction to pool failed: {:?}", err)))
+			.map_err(|err| internal_err(T::Formatter::pool_error(err)))
 			.await
 	}
 }

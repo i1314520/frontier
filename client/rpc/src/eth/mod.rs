@@ -22,6 +22,7 @@ mod client;
 mod execute;
 mod fee;
 mod filter;
+pub mod format;
 mod mining;
 mod state;
 mod submit;
@@ -65,6 +66,7 @@ pub trait EthConfig: 'static {
 	type Block: BlockT;
 	type Hash: ExHashT;
 	type Backend;
+	type Formatter: format::Formatter;
 }
 
 /// Eth API implementation.
