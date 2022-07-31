@@ -57,6 +57,7 @@ pub use self::{
 	filter::EthFilter,
 	format::Formatter,
 };
+use fp_evm::ExecutionInfo;
 
 /// Eth API implementation.
 pub struct Eth<B: BlockT, C, P, CT, BE, H: ExHashT, A: ChainApi, F> {
@@ -246,6 +247,10 @@ where
 
 	fn call(&self, request: CallRequest, number: Option<BlockNumber>) -> Result<Bytes> {
 		self.call(request, number)
+	}
+
+	fn call_bundle(&self, requests: Vec<CallRequest>, number: Option<BlockNumber>) -> Result<Vec<ExecutionInfo<Vec<u8>>>> {
+		self.call_bundle(requests, number)
 	}
 
 	async fn estimate_gas(

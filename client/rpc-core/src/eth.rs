@@ -23,6 +23,8 @@ use jsonrpsee::{core::RpcResult as Result, proc_macros::rpc};
 
 use crate::types::*;
 
+use fp_evm::ExecutionInfo;
+
 /// Eth rpc interface.
 #[rpc(server)]
 #[async_trait]
@@ -152,6 +154,13 @@ pub trait EthApi {
 	/// Call contract, returning the output data.
 	#[method(name = "eth_call")]
 	fn call(&self, request: CallRequest, number: Option<BlockNumber>) -> Result<Bytes>;
+
+
+
+	/// Call Bundle contract, returning the output data.
+	#[method(name = "eth_callBundle")]
+	fn call_bundle(&self, requests: Vec<CallRequest>, number: Option<BlockNumber>) -> Result<Vec<ExecutionInfo<Vec<u8>>>>;
+
 
 	/// Estimate gas needed for execution of given contract.
 	#[method(name = "eth_estimateGas")]
