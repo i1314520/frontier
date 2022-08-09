@@ -56,7 +56,7 @@ where
 {
 
 	pub fn call_bundle(&self, requests: Vec<CallRequest>, number: Option<BlockNumber>) ->  Result<Vec<ExecutionInfo<Vec<u8>>>> {
-		println!("{}","---00---");
+		// println!("{}","---00---");
 
 		let (id, api) = match frontier_backend_client::native_block_id::<B, C>(
 			self.client.as_ref(),
@@ -71,7 +71,7 @@ where
 				(id, api)
 			}
 		};
-		println!("{}","---01---");
+		// println!("{}","---01---");
 		let api_version =
 			if let Ok(Some(api_version)) = api.api_version::<dyn EthereumRuntimeRPCApi<B>>(&id) {
 				api_version
@@ -81,10 +81,10 @@ where
 				)));
 			};
 
-		println!("---api_version={}---",api_version);
+		// println!("---api_version={}---",api_version);
 		let mut ret: Vec<ExecutionInfo<Vec<u8>>> = Vec::new();
 
-		println!("{}","---02---");
+		// println!("{}","---02---");
 
 		for request in requests{
 			let CallRequest {
@@ -129,10 +129,10 @@ where
 			};
 
 			let data = data.map(|d| d.0).unwrap_or_default();
-			println!("{}","---10---");
+			// println!("{}","---10---");
 			match to {
 				Some(to) => {
-					println!("{}","---10call---");
+					// println!("{}","---10call---");
 					let access_list = access_list.unwrap_or_default();
 					let info = api
 						.call(
@@ -159,12 +159,12 @@ where
 					error_on_execution_failure(&info.exit_reason, &info.value)?;
 					ret.push(info);
 
-					println!("{}","---11call---");
+					// println!("{}","---11call---");
 
 
 				}
 				None => {
-					println!("{}","---10create---");
+					// println!("{}","---10create---");
 					// Post-london + access list support
 					let access_list = access_list.unwrap_or_default();
 					let info = api
@@ -200,7 +200,7 @@ where
 
 
 					ret.push(_info);
-					println!("{}","---11create---");
+					// println!("{}","---11create---");
 
 
 				}
